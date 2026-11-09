@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keselamatan Bengkel Shin-chan! (蜡笔小新)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka & Comic Neue -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,700;1,700&family=Fredoka:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', 'Comic Neue', cursive, sans-serif;
+            background-color: #fef08a; /* Yellow Shin-chan style */
+            background-image: radial-gradient(#fde047 2px, transparent 2px);
+            background-size: 24px 24px;
+            color: #1e293b;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Comic Wobbly Border Effect */
+        .comic-box {
+            border: 4px solid #000;
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            box-shadow: 6px 6px 0px #000;
+        }
+
+        .comic-box-sm {
+            border: 3px solid #000;
+            border-radius: 20px 10px 20px 10px/10px 20px 10px 20px;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .comic-btn {
+            border: 3px solid #000;
+            border-radius: 18px 8px 18px 8px/8px 18px 8px 18px;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+        }
+        .comic-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000;
+        }
+        .comic-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        /* Shin-chan Butt Dance Shake */
+        @keyframes butt-dance {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-12deg) scale(1.1) translateX(-8px); }
+            75% { transform: rotate(12deg) scale(1.1) translateX(8px); }
+        }
+        .animate-butt-dance {
+            animation: butt-dance 0.35s infinite ease-in-out;
+        }
+
+        /* Misae Lump / Bonk Animation */
+        @keyframes bonk-bump {
+            0% { transform: scale(0.5) translateY(20px); opacity: 0; }
+            50% { transform: scale(1.3) translateY(-10px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-bonk {
+            animation: bonk-bump 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Speech Bubble Tail */
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border: 3px solid #000;
+            border-radius: 20px;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 30px;
+            border-width: 14px 12px 0;
+            border-style: solid;
+            border-color: #000 transparent;
+            display: block;
+            width: 0;
+        }
+
+        .hazard-shake {
+            animation: butt-dance 0.8s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 overflow-x-hidden">
+
+    <!-- Container Utama Permainan Shin-chan -->
+    <div id="game-container" class="w-full max-w-4xl min-h-[660px] bg-sky-300 comic-box flex flex-col justify-between overflow-hidden relative p-3 sm:p-5">
+
+        <!-- Top Header / Status Bar Shin-chan Style -->
+        <header class="bg-red-500 comic-box-sm p-3 flex justify-between items-center z-20 mb-3 text-white">
+            <div class="flex items-center space-x-3">
+                <!-- Shin-chan Photo Img Tag (Fallbacks to SVG on error) -->
+                <div class="w-12 h-12 rounded-full bg-yellow-400 border-2 border-black flex items-center justify-center overflow-hidden shadow">
+                    <img src="shin_chan_normal.png" alt="Shin-chan" class="w-full h-full object-cover" onerror="this.outerHTML='<svg viewBox=\'0 0 100 100\' class=\'w-full h-full\'><ellipse cx=\'50\' cy=\'55\' rx=\'35\' ry=\'30\' fill=\'#ffdbac\' stroke=\'#000\' stroke-width=\'4\'/><ellipse cx=\'68\' cy=\'55\' rx=\'10\' ry=\'12\' fill=\'#ffdbac\' stroke=\'#000\' stroke-width=\'4\'/><path d=\'M 20 40 Q 50 15 80 35 Q 75 10 30 20 Z\' fill=\'#000\'/><ellipse cx=\'40\' cy=\'50\' rx=\'4\' ry=\'6\' fill=\'#000\'/><ellipse cx=\'60\' cy=\'50\' rx=\'4\' ry=\'6\' fill=\'#000\'/><path d=\'M 30 38 Q 40 32 50 38\' stroke=\'#000\' stroke-width=\'5\' fill=\'none\'/><path d=\'M 55 38 Q 65 32 75 38\' stroke=\'#000\' stroke-width=\'5\' fill=\'none\'/><ellipse cx=\'32\' cy=\'58\' rx=\'5\' ry=\'3\' fill=\'#ff8a8a\'/><ellipse cx=\'68\' cy=\'58\' rx=\'5\' ry=\'3\' fill=\'#ff8a8a\'/><path d=\'M 40 68 Q 50 78 60 68\' stroke=\'#000\' stroke-width=\'4\' fill=\'none\'/></svg>'">
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-wider text-yellow-300 drop-shadow-[0_2px_0_#000]">
+                        SHIN-CHAN BENGKEL HERO! 蜡笔小新
+                    </h1>
+                    <p id="stage-title" class="text-xs font-bold text-white bg-black/30 px-2 py-0.5 rounded-full inline-block">
+                        Tahap 1: Pakaian PPE Shin-chan!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="flex items-center space-x-3 sm:space-x-5">
+                <!-- Mata / Skor -->
+                <div class="bg-yellow-400 border-2 border-black px-3 py-1 rounded-xl text-black font-black flex items-center space-x-1.5 shadow">
+                    <i class="fa-solid fa-star text-red-600"></i>
+                    <span id="score-display" class="text-lg">0</span>
+                </div>
+
+                <!-- Benjolan Nyawa (Misae's Anger Level) -->
+                <div class="flex items-center space-x-1 bg-white border-2 border-black px-2 py-1 rounded-xl" id="lives-container" title="Kemarahan Misae!">
+                    <!-- Rendered JS -->
+                </div>
+
+                <!-- Sound Toggle -->
+                <button id="sound-btn" onclick="toggleAudio()" class="w-10 h-10 bg-emerald-400 comic-btn flex items-center justify-center text-black font-extrabold">
+                    <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dynamic Play Area -->
+        <main id="play-area" class="flex-1 relative flex flex-col items-center justify-center p-2 sm:p-4 bg-white/70 comic-box-sm overflow-hidden">
+
+            <!-- SCREEN 0: START MENU SHIN-CHAN -->
+            <div id="screen-start" class="text-center max-w-lg flex flex-col items-center space-y-4 py-4">
+                <!-- Shin-chan Mascot Photo Box -->
+                <div class="relative flex flex-col items-center">
+                    <div class="w-36 h-36 rounded-full bg-red-500 border-4 border-black flex items-center justify-center shadow-xl animate-bounce overflow-hidden p-1">
+                        <img src="shin_chan_normal.png" alt="Shin-chan Mascot" class="w-full h-full object-cover rounded-full" onerror="this.outerHTML='<svg viewBox=\'0 0 100 100\' class=\'w-full h-full drop-shadow\'><ellipse cx=\'50\' cy=\'55\' rx=\'32\' ry=\'28\' fill=\'#ffdbac\' stroke=\'#000\' stroke-width=\'4\'/><path d=\'M 22 40 Q 50 25 78 40 L 75 60 Q 50 45 25 60 Z\' fill=\'#059669\' stroke=\'#000\' stroke-width=\'3\'/><circle cx=\'38\' cy=\'48\' r=\'6\' fill=\'#fff\' stroke=\'#000\' stroke-width=\'2\'/><circle cx=\'62\' cy=\'48\' r=\'6\' fill=\'#fff\' stroke=\'#000\' stroke-width=\'2\'/><circle cx=\'38\' cy=\'48\' r=\'2.5\' fill=\'#000\'/><circle cx=\'62\' cy=\'48\' r=\'2.5\' fill=\'#000\'/><path d=\'M 42 68 Q 50 74 58 68\' stroke=\'#000\' stroke-width=\'3\' fill=\'none\'/><path d=\'M 50 27 L 50 10\' stroke=\'#000\' stroke-width=\'4\'/><circle cx=\'50\' cy=\'8\' r=\'4\' fill=\'#ef4444\' stroke=\'#000\' stroke-width=\'2\'/></svg>'">
+                    </div>
+                    <!-- Speech bubble -->
+                    <div class="speech-bubble absolute -top-4 -right-16 px-3 py-1 text-xs font-black text-black z-10 whitespace-nowrap shadow-md">
+                        "Wahaha! Action Kamen bekerjasama!" 💥
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-3xl sm:text-4xl font-black text-red-600 drop-shadow-[0_2px_0_#000] tracking-wide">
+                        JANGAN KENA MARAH MISAE! (美冴)
+                    </h2>
+                    <p class="text-slate-800 font-bold text-sm sm:text-base mt-1">
+                        Shin-chan nak belajar di Bengkel RBT! Bantu Shin-chan pakai pakaian keselamatan yang betul & elakkan benjolan kepala daripada Misae!
+                    </p>
+                </div>
+
+                <div class="w-full bg-yellow-200 border-3 border-black p-3.5 rounded-2xl text-left text-xs sm:text-sm font-bold space-y-1.5 shadow">
+                    <div class="text-red-600 font-black text-base flex items-center">
+                        <i class="fa-solid fa-scroll mr-2"></i> Misi Nakal Shin-chan:
+                    </div>
+                    <p>👉 1. Pakai PPE Keselamatan (Buang seluar renang & selipar gajah!).</p>
+                    <p>👉 2. Lap minyak licin & kemas gergaji sebelum Misae sampai!</p>
+                    <p>👉 3. Jawab Kuiz Bengkel bersama Action Kamen!</p>
+                </div>
+
+                <button onclick="startGame()" class="w-full py-3.5 px-8 bg-amber-400 hover:bg-yellow-300 text-black font-black text-xl comic-btn flex items-center justify-center space-x-2">
+                    <span>MULA BENGKEL SHIN-CHAN!</span>
+                    <i class="fa-solid fa-bolt text-red-600"></i>
+                </button>
+            </div>
+
+            <!-- STAGE 1: PAKAI PPE SHIN-CHAN -->
+            <div id="screen-stage1" class="hidden w-full h-full flex flex-col lg:flex-row items-center justify-around gap-4">
+                
+                <!-- Character Shin-chan Visual Slot -->
+                <div class="relative w-64 h-80 bg-sky-100 border-4 border-black rounded-3xl flex flex-col items-center justify-center p-3 shadow-inner">
+                    
+                    <!-- Speech Bubble Reaction -->
+                    <div id="shin-speech" class="speech-bubble absolute -top-4 px-3 py-1 text-xs font-black text-red-600 z-20">
+                        "Saya comel tak?" 🐘
+                    </div>
+
+                    <!-- Misae Lump / Bump Effect (Hidden initially) -->
+                    <div id="misae-lump" class="hidden absolute top-2 right-8 z-30 flex flex-col items-center animate-bonk">
+                        <div class="w-10 h-12 bg-pink-500 rounded-t-full border-2 border-black flex items-center justify-center text-white font-black text-xs shadow-lg">
+                            💥
+                        </div>
+                        <span class="bg-red-600 text-white text-[9px] font-black px-1 rounded border border-black">BENJOL!</span>
+                    </div>
+
+                    <!-- Shin-chan Dynamic Character Photo & Costume Overlay -->
+                    <div id="shin-body-container" class="relative w-48 h-64 flex flex-col items-center justify-center bg-yellow-300/30 rounded-2xl border-2 border-dashed border-black p-2 overflow-hidden">
+                        
+                        <!-- Base Shin-chan Photo -->
+                        <img id="shin-base-photo" src="shin_chan_normal.png" alt="Shin-chan Normal" class="w-36 h-48 object-contain z-0 transition-transform duration-200" onerror="this.style.display='none'; document.getElementById('shin-full-svg').style.display='block';">
+
+                        <!-- SVG Fallback Avatar (Hidden if image loads) -->
+                        <svg id="shin-full-svg" viewBox="0 0 100 140" class="w-full h-full hidden z-0">
+                            <g id="svg-head">
+                                <ellipse cx="50" cy="45" rx="32" ry="26" fill="#ffdbac" stroke="#000" stroke-width="3"/>
+                                <ellipse cx="66" cy="45" rx="8" ry="10" fill="#ffdbac" stroke="#000" stroke-width="3"/>
+                                <path d="M 22 35 Q 50 15 78 30 Q 75 10 30 15 Z" fill="#000"/>
+                                <path d="M 32 30 Q 42 24 50 30" stroke="#000" stroke-width="4" fill="none"/>
+                                <path d="M 56 30 Q 64 24 72 30" stroke="#000" stroke-width="4" fill="none"/>
+                                <circle cx="42" cy="40" r="3.5" fill="#000"/>
+                                <circle cx="62" cy="40" r="3.5" fill="#000"/>
+                                <path d="M 42 55 Q 50 63 58 55" stroke="#000" stroke-width="3" fill="none"/>
+                            </g>
+                            <g id="svg-torso">
+                                <path d="M 28 66 L 72 66 L 78 100 L 22 100 Z" fill="#ef4444" stroke="#000" stroke-width="3"/>
+                                <circle cx="20" cy="78" r="7" fill="#ffdbac" stroke="#000" stroke-width="2"/>
+                                <circle cx="80" cy="78" r="7" fill="#ffdbac" stroke="#000" stroke-width="2"/>
+                            </g>
+                            <g id="svg-feet">
+                                <rect x="28" y="100" width="44" height="18" fill="#facc15" stroke="#000" stroke-width="3"/>
+                                <rect x="34" y="118" width="10" height="12" fill="#ffdbac" stroke="#000" stroke-width="2"/>
+                                <rect x="56" y="118" width="10" height="12" fill="#ffdbac" stroke="#000" stroke-width="2"/>
+                                <ellipse cx="39" cy="132" rx="9" ry="4" fill="#3b82f6" stroke="#000" stroke-width="2"/>
+                                <ellipse cx="61" cy="132" rx="9" ry="4" fill="#3b82f6" stroke="#000" stroke-width="2"/>
+                            </g>
+                        </svg>
+
+                        <!-- PPE Overlays (Positioned dynamically over photo) -->
+                        <div id="overlay-helmet" class="hidden absolute top-2 left-1/2 transform -translate-x-1/2 z-10 text-yellow-400 text-5xl filter drop-shadow-[0_2px_0_#000]">
+                            <i class="fa-solid fa-hard-hat"></i>
+                        </div>
+                        <div id="overlay-goggles" class="hidden absolute top-12 left-1/2 transform -translate-x-1/2 z-10 text-blue-500 text-2xl filter drop-shadow">
+                            <i class="fa-solid fa-glasses"></i>
+                        </div>
+                        <div id="overlay-gloves" class="hidden absolute top-28 left-4 right-4 flex justify-between z-10 text-emerald-500 text-2xl filter drop-shadow">
+                            <i class="fa-solid fa-mitten"></i>
+                            <i class="fa-solid fa-mitten transform -scale-x-100"></i>
+                        </div>
+                        <div id="overlay-boots" class="hidden absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 text-slate-900 text-3xl filter drop-shadow">
+                            <i class="fa-solid fa-shoe-prints"></i>
+                        </div>
+
+                    </div>
+
+                    <!-- PPE Checklist count -->
+                    <div id="ppe-count-badge" class="mt-2 text-xs font-black px-3 py-1 bg-yellow-400 border-2 border-black rounded-full">
+                        PPE Dipasang: 0 / 4
+                    </div>
+                </div>
+
+                <!-- PPE Items Selection Grid -->
+                <div class="flex-1 w-full max-w-md">
+                    <p class="text-xs sm:text-sm text-black font-black mb-2 bg-yellow-300 border-2 border-black px-3 py-1 rounded-xl inline-block">
+                        Pilih PPE Keselamatan Bengkel yang <span class="text-red-600">BETUL</span> sahaja:
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-2.5" id="ppe-options-grid">
+                        <!-- Items rendered via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 2: KEMAS BENGKEL NAKAL SHIN-CHAN -->
+            <div id="screen-stage2" class="hidden w-full h-full flex flex-col items-center">
+                <!-- Timer & Header -->
+                <div class="w-full flex justify-between items-center mb-2 bg-yellow-300 border-3 border-black px-3 py-1.5 rounded-xl font-black">
+                    <span class="text-xs sm:text-sm text-black flex items-center">
+                        <i class="fa-solid fa-broom text-red-600 mr-1.5 text-base"></i> Bersihkan Bahaya Sebelum Misae Sampai!
+                    </span>
+                    <div class="flex items-center space-x-1.5 bg-red-500 text-white px-3 py-0.5 rounded-lg border-2 border-black">
+                        <i class="fa-solid fa-stopwatch"></i>
+                        <span id="hazard-timer" class="font-mono text-base">20s</span>
+                    </div>
+                </div>
+
+                <!-- Workshop Canvas Floor -->
+                <div class="relative w-full h-[340px] bg-amber-100 border-4 border-black rounded-2xl overflow-hidden shadow-inner" id="workshop-canvas">
+                    <!-- Floor tile styling -->
+                    <div class="absolute inset-0 opacity-20 pointer-events-none grid grid-cols-5 grid-rows-4 gap-1 p-1">
+                        <div class="border-2 border-black rounded"></div>
+                        <div class="border-2 border-black rounded"></div>
+                        <div class="border-2 border-black rounded"></div>
+                        <div class="border-2 border-black rounded"></div>
+                        <div class="border-2 border-black rounded"></div>
+                    </div>
+
+                    <!-- Misae Patrol Warning Banner -->
+                    <div id="misae-warning" class="hidden absolute top-2 left-1/2 transform -translate-x-1/2 bg-red-600 text-yellow-300 border-2 border-black px-4 py-1 rounded-full font-black text-xs animate-bounce z-30 flex items-center space-x-2">
+                        <span>🚨 MISAE DAH NAK SAMPAI! CEPAT SHIN-CHAN! 🚨</span>
+                    </div>
+
+                    <!-- Interactive Hazard Elements -->
+                    <div id="hazards-container" class="absolute inset-0">
+                        <!-- Rendered JS -->
+                    </div>
+                </div>
+
+                <p class="text-xs font-black text-slate-800 mt-2 bg-white border-2 border-black px-3 py-1 rounded-full">
+                    Bahaya Berisiko Baki: <span id="hazards-left-count" class="text-red-600 text-sm">5</span>
+                </p>
+            </div>
+
+            <!-- STAGE 3: KUIZ WIRA ACTION KAMEN -->
+            <div id="screen-stage3" class="hidden w-full max-w-xl flex flex-col items-center">
+                <!-- Progress Header -->
+                <div class="w-full flex justify-between text-xs font-black text-black mb-2">
+                    <span id="quiz-progress-text" class="bg-yellow-300 border-2 border-black px-2 py-0.5 rounded-lg">Soalan 1 / 3</span>
+                    <span class="bg-red-500 text-white border-2 border-black px-2 py-0.5 rounded-lg">Ujian Hero Action Kamen! 💥</span>
+                </div>
+
+                <!-- Question Card -->
+                <div class="w-full bg-yellow-100 border-4 border-black p-4 rounded-2xl shadow-lg mb-3">
+                    <h3 id="quiz-question-text" class="text-base sm:text-lg font-black text-black mb-3">
+                        Loading Soalan...
+                    </h3>
+
+                    <!-- Choices Container -->
+                    <div class="space-y-2" id="quiz-options-container">
+                        <!-- Dynamically Generated -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCREEN 4: VICTORY / SUMMARY SHIN-CHAN -->
+            <div id="screen-summary" class="hidden text-center max-w-md flex flex-col items-center space-y-4 py-2">
+                <!-- Badge Photo / SVG -->
+                <div id="final-badge-icon" class="w-28 h-28 rounded-full bg-yellow-400 border-4 border-black flex items-center justify-center p-1 shadow-2xl animate-bounce overflow-hidden">
+                    <img src="shin_chan_normal.png" alt="Shin-chan Winner" class="w-full h-full object-cover rounded-full" onerror="this.outerHTML='<svg viewBox=\'0 0 100 100\' class=\'w-full h-full\'><ellipse cx=\'50\' cy=\'55\' rx=\'32\' ry=\'26\' fill=\'#ffdbac\' stroke=\'#000\' stroke-width=\'3\'/><path d=\'M 22 35 Q 50 15 78 30 Z\' fill=\'#000\'/><path d=\'M 25 25 L 50 5 L 75 25 L 65 25 L 50 12 L 35 25 Z\' fill=\'#ef4444\' stroke=\'#000\' stroke-width=\'2\'/><circle cx=\'42\' cy=\'48\' r=\'3.5\' fill=\'#000\'/><circle cx=\'62\' cy=\'48\' r=\'3.5\' fill=\'#000\'/><path d=\'M 38 65 Q 50 78 62 65 Z\' fill=\'#ef4444\' stroke=\'#000\' stroke-width=\'2\'/></svg>'">
+                </div>
+
+                <div>
+                    <span class="text-xs font-black uppercase tracking-wider bg-black text-yellow-300 px-3 py-1 rounded-full">GELARAN KESELAMATAN</span>
+                    <h2 id="final-rank-title" class="text-2xl sm:text-3xl font-black text-red-600 drop-shadow-[0_2px_0_#000] mt-1">
+                        BENGKEL MASTER CRAYON!
+                    </h2>
+                    <p id="final-score-text" class="text-slate-900 font-bold text-sm mt-1">Jumlah Mata: 200</p>
+                </div>
+
+                <!-- Summary Box -->
+                <div class="w-full bg-yellow-200 border-3 border-black p-3.5 rounded-2xl text-left space-y-1.5 text-xs font-bold">
+                    <div class="font-black text-black text-sm border-b-2 border-black pb-1 mb-1 flex items-center justify-between">
+                        <span><i class="fa-solid fa-award text-red-600 mr-1"></i> Pesanan Misae & Action Kamen:</span>
+                        <span class="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded">UTAMAKAN SAFETY</span>
+                    </div>
+                    <p class="text-slate-800">✅ PPE Lengkap menghindarkan kemalangan parah di bengkel.</p>
+                    <p class="text-slate-800">✅ Lantai bersih & alatan teratur elak tergelincir atau luka.</p>
+                    <p class="text-slate-800">✅ Dengar arahan guru bengkel & jangan bergurau melampau!</p>
+                </div>
+
+                <button onclick="startGame()" class="w-full py-3.5 px-6 bg-red-500 hover:bg-red-400 text-yellow-300 font-black text-lg comic-btn flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>MAIN SEMULA BERSAMA SHIN-CHAN!</span>
+                </button>
+            </div>
+
+        </main>
+
+        <!-- Dynamic Shin-chan Toast / Reaction Banner -->
+        <div id="toast-msg" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-yellow-300 border-3 border-black text-black text-xs sm:text-sm font-black rounded-2xl shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+            <i id="toast-icon" class="fa-solid fa-circle-info text-red-600 text-base"></i>
+            <span id="toast-text">Mesej Shin-chan</span>
+        </div>
+    </div>
+
+    <!-- Web Audio & Game Logic -->
+    <script>
+        /* ==========================================
+           WEB AUDIO SYNTHESIZER (Shin-chan Style Sounds)
+           ========================================== */
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (isMuted) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'win') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.12);
+                osc.frequency.setValueAtTime(783.99, now + 0.24);
+                osc.frequency.setValueAtTime(1046.50, now + 0.36);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                osc.start(now);
+                osc.stop(now + 0.6);
+            } else if (type === 'butt-dance') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.linearRampToValueAtTime(440, now + 0.1);
+                osc.frequency.linearRampToValueAtTime(220, now + 0.2);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } else if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+        }
+
+        function toggleAudio() {
+            isMuted = !isMuted;
+            const icon = document.getElementById('sound-icon');
+            if (isMuted) {
+                icon.className = 'fa-solid fa-volume-xmark text-red-600';
+            } else {
+                icon.className = 'fa-solid fa-volume-high text-black';
+                playSound('click');
+            }
+        }
+
+        /* ==========================================
+           GAME STATE
+           ========================================== */
+        let score = 0;
+        let lives = 3;
+        let currentStage = 1;
+
+        const ppeState = {
+            helmet: false,
+            goggles: false,
+            gloves: false,
+            boots: false
+        };
+
+        let hazardTimer = null;
+        let timeLeft = 20;
+        let hazardsFixed = 0;
+        const totalHazards = 5;
+
+        const hazardItemsData = [
+            { id: 1, name: 'Tumpahan Air Coklat Chocobi', icon: 'fa-droplet', top: '72%', left: '18%', text: 'Air Chocobi dilap kering! Elak tergelincir!' },
+            { id: 2, name: 'Suis Mesin Terbiar Aktif', icon: 'fa-plug-circle-bolt', top: '30%', left: '78%', text: 'Suis dipadamkan! Selamat!' },
+            { id: 3, name: 'Alat Pemadam Api Terhalang Mainan', icon: 'fa-fire-extinguisher', top: '18%', left: '12%', text: 'Laluan pemadam api dibersihkan!' },
+            { id: 4, name: 'Gergaji Pemotong Atas Lantai', icon: 'fa-triangle-exclamation', top: '78%', left: '60%', text: 'Gergaji disimpan rapi dalam rak!' },
+            { id: 5, name: 'Kabel Elektrik Terkeluar', icon: 'fa-bolt', top: '48%', left: '42%', text: 'Kabel elektrik ditutup kemas!' }
+        ];
+
+        let currentQuizIndex = 0;
+        const quizData = [
+            {
+                q: "Shin-chan nak potong kayu guna mesin. Apakah perkara PERTAMA yang Misae & Guru wajibkan?",
+                options: [
+                    "Pakai Kacamata Keselamatan (Goggles) & Topi Keselamatan",
+                    "Menari tarian 屁屁星人 (Butt Dance) depan mesin",
+                    "Makan biskut Chocobi sambil pegang kayu",
+                    "Tidur atas meja bengkel"
+                ],
+                answer: 0,
+                explain: "Wajib pakai PPE peribadi sebelum mengendalikan sebarang mesin!"
+            },
+            {
+                q: "Mengapakah Shin-chan DILARANG memakai seluar renang gajah atau baju longgar di bengkel?",
+                options: [
+                    "Sebab Misae rasa ia tidak comel",
+                    "Sebab pakaian longgar berisiko tersangkut pada mesin berputar!",
+                    "Sebab Action Kamen tak suka warna merah",
+                    "Sebab seluar gajah terlalu mahal"
+                ],
+                answer: 1,
+                explain: "Pakaian longgar berbahaya kerana boleh ditarik oleh komponen mesin berputar."
+            },
+            {
+                q: "Apakah yang perlu dilakukan jika terjumpa tumpahan minyak atau air di lantai bengkel?",
+                options: [
+                    "Lompat dan berenang atas minyak",
+                    "Biarkan sahaja supaya kawan tergelincir",
+                    "Lap segera & meletakkan tanda Amaran Lantai Licin",
+                    "Panggil Shiro untuk minum minyak itu"
+                ],
+                answer: 2,
+                explain: "Lantai licin punca utama kemalangan jatuh tergelincir di bengkel!"
+            }
+        ];
+
+        /* ==========================================
+           UI & TOAST HELPERS
+           ========================================== */
+        function showToast(msg, isSuccess = true) {
+            const toast = document.getElementById('toast-msg');
+            const icon = document.getElementById('toast-icon');
+            const text = document.getElementById('toast-text');
+
+            text.innerText = msg;
+            if (isSuccess) {
+                icon.className = 'fa-solid fa-circle-check text-emerald-600';
+                toast.className = toast.className.replace(/border-[a-z-0-9]+/, 'border-emerald-500');
+            } else {
+                icon.className = 'fa-solid fa-face-frown text-red-600';
+                toast.className = toast.className.replace(/border-[a-z-0-9]+/, 'border-red-600');
+            }
+
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2200);
+        }
+
+        function updateStatsUI() {
+            document.getElementById('score-display').innerText = score;
+
+            const livesContainer = document.getElementById('lives-container');
+            livesContainer.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const lump = document.createElement('span');
+                if (i < (3 - lives)) {
+                    lump.className = 'text-base text-red-600 font-black animate-pulse';
+                    lump.innerHTML = '💥';
+                } else {
+                    lump.className = 'text-xs text-yellow-500';
+                    lump.innerHTML = '<i class="fa-solid fa-heart"></i>';
+                }
+                livesContainer.appendChild(lump);
+            }
+        }
+
+        function deductLife() {
+            lives--;
+            playSound('wrong');
+            
+            const lumpElem = document.getElementById('misae-lump');
+            if (lumpElem) {
+                lumpElem.classList.remove('hidden');
+                setTimeout(() => lumpElem.classList.add('hidden'), 1500);
+            }
+
+            triggerShinChanReaction("Adoi! Ketukan Misae (美冴) sampai!", "wrong");
+
+            updateStatsUI();
+            if (lives <= 0) {
+                showToast("Misae dah mengamuk! Shin-chan kena denda!", false);
+                setTimeout(() => {
+                    startGame();
+                }, 1800);
+            }
+        }
+
+        function triggerShinChanReaction(speechText, type = 'normal') {
+            const speech = document.getElementById('shin-speech');
+            const body = document.getElementById('shin-body-container');
+
+            if (speech) speech.innerText = speechText;
+
+            if (type === 'dance') {
+                playSound('butt-dance');
+                body.classList.add('animate-butt-dance');
+                setTimeout(() => body.classList.remove('animate-butt-dance'), 1200);
+            }
+        }
+
+        function startGame() {
+            playSound('click');
+            score = 0;
+            lives = 3;
+            currentStage = 1;
+            
+            for (let key in ppeState) ppeState[key] = false;
+
+            updateStatsUI();
+            showStage(1);
+        }
+
+        function showStage(stageNum) {
+            currentStage = stageNum;
+            
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-stage1').classList.add('hidden');
+            document.getElementById('screen-stage2').classList.add('hidden');
+            document.getElementById('screen-stage3').classList.add('hidden');
+            document.getElementById('screen-summary').classList.add('hidden');
+
+            const titleElem = document.getElementById('stage-title');
+
+            if (stageNum === 1) {
+                titleElem.innerText = 'Tahap 1: Pakaian PPE Shin-chan!';
+                document.getElementById('screen-stage1').classList.remove('hidden');
+                setupStage1();
+            } else if (stageNum === 2) {
+                titleElem.innerText = 'Tahap 2: Kemas Bengkel Nakal Shin-chan!';
+                document.getElementById('screen-stage2').classList.remove('hidden');
+                setupStage2();
+            } else if (stageNum === 3) {
+                titleElem.innerText = 'Tahap 3: Kuiz Wira Action Kamen!';
+                document.getElementById('screen-stage3').classList.remove('hidden');
+                setupStage3();
+            } else if (stageNum === 4) {
+                titleElem.innerText = 'Keputusan Crayon Bengkel Master!';
+                document.getElementById('screen-summary').classList.remove('hidden');
+                setupSummary();
+            }
+        }
+
+        /* ==========================================
+           STAGE 1: PPE DRESS UP SHIN-CHAN
+           ========================================== */
+        const ppeItemsList = [
+            { id: 'helmet', name: 'Topi Keselamatan (Hard Hat)', isCorrect: true, icon: 'fa-hard-hat' },
+            { id: 'goggles', name: 'Kacamata Keselamatan Action', isCorrect: true, icon: 'fa-glasses' },
+            { id: 'gloves', name: 'Sarung Tangan Bengkel', isCorrect: true, icon: 'fa-mitten' },
+            { id: 'boots', name: 'Kasut Keselamatan Besi', isCorrect: true, icon: 'fa-shoe-prints' },
+            { id: 'trunk', name: 'Seluar Renang Gajah 🐘', isCorrect: false, icon: 'fa-water', desc: 'Shin-chan menari 屁屁星人!' },
+            { id: 'slippers', name: 'Selipar Jepun Santai', isCorrect: false, icon: 'fa-mattress-pillow', desc: 'Lantai bengkel tajam & licin!' }
+        ];
+
+        function setupStage1() {
+            const grid = document.getElementById('ppe-options-grid');
+            grid.innerHTML = '';
+
+            updateAvatarVisuals();
+
+            ppeItemsList.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'comic-btn flex items-center space-x-2.5 p-2.5 bg-yellow-300 hover:bg-yellow-200 text-left w-full';
+                btn.onclick = () => selectPPEItem(item, btn);
+
+                btn.innerHTML = `
+                    <div class="w-9 h-9 rounded-xl bg-red-500 border-2 border-black flex items-center justify-center text-white text-base shadow">
+                        <i class="fa-solid ${item.icon}"></i>
+                    </div>
+                    <div>
+                        <div class="font-black text-xs text-black leading-tight">${item.name}</div>
+                        <div class="text-[10px] text-slate-700 font-bold">${item.isCorrect ? 'Utamakan Safety!' : 'Nakal / Bahaya!'}</div>
+                    </div>
+                `;
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectPPEItem(item, buttonElem) {
+            if (item.isCorrect) {
+                if (!ppeState[item.id]) {
+                    ppeState[item.id] = true;
+                    score += 25;
+                    playSound('correct');
+                    showToast(`+25 Mata: ${item.name} Dipakai!`, true);
+                    buttonElem.classList.remove('bg-yellow-300');
+                    buttonElem.classList.add('bg-emerald-400');
+                    
+                    triggerShinChanReaction("Wahaha! Action Kamen setuju!", "normal");
+                    updateStatsUI();
+                    updateAvatarVisuals();
+
+                    const equippedCount = Object.values(ppeState).filter(v => v).length;
+                    if (equippedCount === 4) {
+                        setTimeout(() => {
+                            showToast("Hebat! Shin-chan sedia ke Tahap 2!", true);
+                            setTimeout(() => showStage(2), 1200);
+                        }, 400);
+                    }
+                } else {
+                    showToast("PPE ini dah pun dipakai oleh Shin-chan!");
+                }
+            } else {
+                deductLife();
+                showToast(`AMARAN! ${item.desc}`, false);
+                buttonElem.classList.add('bg-red-400');
+                triggerShinChanReaction("屁屁星人! Menari Butt Dance!", "dance");
+            }
+        }
+
+        function updateAvatarVisuals() {
+            const count = Object.values(ppeState).filter(v => v).length;
+            document.getElementById('ppe-count-badge').innerText = `PPE Dipasang: ${count} / 4`;
+
+            // Toggle Photo/SVG PPE Overlay Items
+            document.getElementById('overlay-helmet').style.display = ppeState.helmet ? 'block' : 'none';
+            document.getElementById('overlay-goggles').style.display = ppeState.goggles ? 'block' : 'none';
+            document.getElementById('overlay-gloves').style.display = ppeState.gloves ? 'block' : 'none';
+            document.getElementById('overlay-boots').style.display = ppeState.boots ? 'block' : 'none';
+
+            // SVG elements if fallback active
+            const helmSvg = document.getElementById('svg-helmet-item');
+            if (helmSvg) helmSvg.style.display = ppeState.helmet ? 'block' : 'none';
+            const gogSvg = document.getElementById('svg-goggles-item');
+            if (gogSvg) gogSvg.style.display = ppeState.goggles ? 'block' : 'none';
+            const glvSvg = document.getElementById('svg-gloves-item');
+            if (glvSvg) glvSvg.style.display = ppeState.gloves ? 'block' : 'none';
+            const bootSvg = document.getElementById('svg-boots-item');
+            if (bootSvg) bootSvg.style.display = ppeState.boots ? 'block' : 'none';
+        }
+
+        /* ==========================================
+           STAGE 2: SPOT & FIX HAZARDS
+           ========================================== */
+        function setupStage2() {
+            timeLeft = 20;
+            hazardsFixed = 0;
+            document.getElementById('hazard-timer').innerText = `${timeLeft}s`;
+            document.getElementById('hazards-left-count').innerText = totalHazards - hazardsFixed;
+            document.getElementById('misae-warning').classList.add('hidden');
+
+            const container = document.getElementById('hazards-container');
+            container.innerHTML = '';
+
+            hazardItemsData.forEach(hazard => {
+                const node = document.createElement('div');
+                node.id = `hazard-node-${hazard.id}`;
+                node.className = 'absolute p-3 rounded-full bg-red-500 border-3 border-black text-yellow-300 hazard-shake flex items-center justify-center cursor-pointer shadow-lg transform transition hover:scale-125 z-20';
+                node.style.top = hazard.top;
+                node.style.left = hazard.left;
+                node.title = hazard.name;
+
+                node.innerHTML = `<i class="fa-solid ${hazard.icon} text-xl sm:text-2xl"></i>`;
+                node.onclick = () => fixHazard(hazard, node);
+
+                container.appendChild(node);
+            });
+
+            clearInterval(hazardTimer);
+            hazardTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('hazard-timer').innerText = `${timeLeft}s`;
+                
+                if (timeLeft === 7) {
+                    document.getElementById('misae-warning').classList.remove('hidden');
+                    playSound('wrong');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(hazardTimer);
+                    deductLife();
+                    showToast("Masa Tamat! Misae dapat tangkap kemasan belum siap!", false);
+                    setTimeout(() => showStage(3), 1000);
+                }
+            }, 1000);
+        }
+
+        function fixHazard(hazard, element) {
+            if (element.classList.contains('hazard-fixed')) return;
+
+            playSound('correct');
+            score += 30;
+            hazardsFixed++;
+            updateStatsUI();
+
+            element.classList.remove('hazard-shake', 'bg-red-500', 'text-yellow-300');
+            element.classList.add('hazard-fixed', 'bg-emerald-400', 'text-black');
+            element.innerHTML = `<i class="fa-solid fa-check text-2xl font-black"></i>`;
+
+            showToast(`+30 Mata: ${hazard.text}`, true);
+            document.getElementById('hazards-left-count').innerText = totalHazards - hazardsFixed;
+
+            if (hazardsFixed >= totalHazards) {
+                clearInterval(hazardTimer);
+                setTimeout(() => {
+                    showToast("Hebat! Bengkel Shin-chan kini Bebas Bahaya!", true);
+                    setTimeout(() => showStage(3), 1200);
+                }, 400);
+            }
+        }
+
+        /* ==========================================
+           STAGE 3: ACTION KAMEN QUIZ
+           ========================================== */
+        function setupStage3() {
+            currentQuizIndex = 0;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const data = quizData[currentQuizIndex];
+            document.getElementById('quiz-progress-text').innerText = `Soalan ${currentQuizIndex + 1} / ${quizData.length}`;
+            document.getElementById('quiz-question-text').innerText = data.q;
+
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            data.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'comic-btn w-full p-3 bg-white hover:bg-yellow-200 text-left text-xs sm:text-sm font-black text-black flex items-center justify-between group';
+                btn.onclick = () => handleQuizAnswer(idx, data.answer, btn);
+
+                btn.innerHTML = `
+                    <span><strong class="text-red-600 mr-1.5">${String.fromCharCode(65 + idx)}.</strong> ${optText}</span>
+                    <i class="fa-solid fa-bolt text-slate-300 group-hover:text-yellow-500"></i>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(selectedIndex, correctIndex, buttonElem) {
+            const data = quizData[currentQuizIndex];
+
+            if (selectedIndex === correctIndex) {
+                playSound('correct');
+                score += 50;
+                buttonElem.classList.remove('bg-white');
+                buttonElem.classList.add('bg-emerald-400');
+                showToast(`Tepat! ${data.explain}`, true);
+            } else {
+                deductLife();
+                buttonElem.classList.remove('bg-white');
+                buttonElem.classList.add('bg-red-400');
+                showToast(`Salah! Jawapan betul: ${String.fromCharCode(65 + correctIndex)}`, false);
+            }
+
+            updateStatsUI();
+
+            setTimeout(() => {
+                currentQuizIndex++;
+                if (currentQuizIndex < quizData.length && lives > 0) {
+                    renderQuizQuestion();
+                } else if (lives > 0) {
+                    playSound('win');
+                    showStage(4);
+                }
+            }, 1800);
+        }
+
+        /* ==========================================
+           STAGE 4: SUMMARY SHIN-CHAN
+           ========================================== */
+        function setupSummary() {
+            document.getElementById('final-score-text').innerText = `Jumlah Skor Akhir: ${score} Mata | Nyawa Misae Baki: ${lives}`;
+
+            const rankTitle = document.getElementById('final-rank-title');
+
+            if (score >= 220) {
+                rankTitle.innerText = "BENGKEL MASTER CRAYON! 💥";
+            } else if (score >= 140) {
+                rankTitle.innerText = "WIRA ACTION KAMEN BENGKEL!";
+            } else {
+                rankTitle.innerText = "MURID NAKAL SHIN-CHAN";
+            }
+        }
+    </script>
+</body>
+</html>
